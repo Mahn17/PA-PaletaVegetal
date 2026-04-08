@@ -9,9 +9,11 @@ export default function Especies() {
     const [archivoFoto, setArchivoFoto] = useState(null);
     const [archivoTabla, setArchivoTabla] = useState(null);
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+    
     useEffect(() => {
         async function populateWeatherData() {
-            const response = await fetch('api/vegetacion');
+            const response = await fetch('${API_BASE_URL}/api/vegetacion');
             if (response.ok) {
                 const data = await response.json();
                 setForecasts(data);
@@ -55,7 +57,7 @@ export default function Especies() {
                     return;
                 }
             }
-            const url = registroEditando ? `api/vegetacion/${registroEditando.id}` : 'api/vegetacion';
+            const url = registroEditando ? `${API_BASE_URL}/api/vegetacion/${registroEditando.id}` : '${API_BASE_URL}/api/vegetacion';
             const metodo = registroEditando ? 'PUT' : 'POST';
             const cuerpoPeticion = registroEditando ? { ...valores, id: registroEditando.id } : valores;
 
@@ -78,21 +80,21 @@ export default function Especies() {
                     const formDataFoto = new FormData();
                     formDataFoto.append('file', archivoFoto);
                     // Apuntamos al endpoint .../image/{id}/foto
-                    await fetch(`api/vegetacion/image/${idRegistro}/foto`, { method: 'POST', body: formDataFoto });
+                    await fetch(`${API_BASE_URL}/api/vegetacion/image/${idRegistro}/foto`, { method: 'POST', body: formDataFoto });
                 }
                 // 4. SUBIDA TABLA (Si se seleccionó archivo)
                 if (archivoTabla && idRegistro) {
                     const formDataTabla = new FormData();
                     formDataTabla.append('file', archivoTabla);
                     // Apuntamos al endpoint .../image/{id}/tabla
-                    await fetch(`api/vegetacion/image/${idRegistro}/tabla`, { method: 'POST', body: formDataTabla });
+                    await fetch(`${API_BASE_URL}/api/vegetacion/image/${idRegistro}/tabla`, { method: 'POST', body: formDataTabla });
                 }
                 message.success(`Vegetación ${registroEditando ? 'actualizada' : 'agregada'} correctamente`);
                 setIsModalVisible(false);
                 setArchivoFoto(null);
                 setArchivoTabla(null);
                 //recarga de tabla
-                const refreshResponse = await fetch('api/vegetacion');
+                const refreshResponse = await fetch('${API_BASE_URL}/api/vegetacion');
                 if (refreshResponse.ok) {
                     const data = await refreshResponse.json();
                     setForecasts(data);
@@ -304,14 +306,14 @@ export default function Especies() {
                                 {
                                     key: 'foto',
                                     titulo: 'Fotografía de la Planta',
-                                    ruta: record.imagenUrl || `/FotosPV/foto.png`, // Usamos la URL real
+                                    ruta: record.imagenUrl ? `${API_BASE_URL}${record.imagenUrl}` : `/FotosPV/foto.png`, // Usamos la URL real
                                     anchoMaximo: 300,
                                     icono: <PictureOutlined />
                                 },
                                 {
                                     key: 'tabla',
                                     titulo: 'Tabla Cromática',
-                                    ruta: record.tablaCromaticaUrl || `/FotosPV/tabla.png`, // Usamos la URL real de la tabla
+                                    ruta: record.tablaCromaticaUrl ? `${API_BASE_URL}${record.tablaCromaticaUrl}` : `/FotosPV/tabla.png`, // Usamos la URL real de la tabla
                                     anchoMaximo: 700,
                                     icono: <FileImageOutlined />
                                 }

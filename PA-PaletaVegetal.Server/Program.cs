@@ -65,5 +65,22 @@ app.MapControllers();
 
 // 5. ELIMINAR EL FALLBACK (Esto evitaba que vieras errores 404 reales de la API)
 // app.MapFallbackToFile("/index.html"); 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<PA_PaletaVegetalServerContext>();
+        // Esto crea las tablas en Azure basándose en tus clases de C#
+        context.Database.EnsureCreated(); 
+        Console.WriteLine("Tablas creadas/verificadas con éxito.");
+    }
+    catch (Exception ex)
+    {
+        // Esto ayudará a ver el error real en los Logs de Azure si algo falla
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error al sincronizar los modelos con la base de datos.");
+    }
+}
 
 app.Run();

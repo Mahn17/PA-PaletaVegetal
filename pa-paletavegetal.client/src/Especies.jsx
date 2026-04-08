@@ -13,7 +13,7 @@ export default function Especies() {
     
     useEffect(() => {
         async function populateWeatherData() {
-            const response = await fetch('${API_BASE_URL}/api/vegetacion');
+            const response = await fetch(`${API_BASE_URL}/api/vegetacion`);
             if (response.ok) {
                 const data = await response.json();
                 setForecasts(data);
@@ -57,7 +57,7 @@ export default function Especies() {
                     return;
                 }
             }
-            const url = registroEditando ? `${API_BASE_URL}/api/vegetacion/${registroEditando.id}` : '${API_BASE_URL}/api/vegetacion';
+            const url = registroEditando ? `${API_BASE_URL}/api/vegetacion/${registroEditando.id}` : `${API_BASE_URL}/api/vegetacion`;
             const metodo = registroEditando ? 'PUT' : 'POST';
             const cuerpoPeticion = registroEditando ? { ...valores, id: registroEditando.id } : valores;
 
@@ -94,7 +94,7 @@ export default function Especies() {
                 setArchivoFoto(null);
                 setArchivoTabla(null);
                 //recarga de tabla
-                const refreshResponse = await fetch('${API_BASE_URL}/api/vegetacion');
+                const refreshResponse = await fetch(`${API_BASE_URL}/api/vegetacion`);
                 if (refreshResponse.ok) {
                     const data = await refreshResponse.json();
                     setForecasts(data);

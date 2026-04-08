@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("https://tu-url-de-static-app.azurestaticapps.net") // <-- REEMPLAZA CON TU URL DE AZURE
+        policy.WithOrigins("https://gentle-bay-07964fb1e.6.azurestaticapps.net/") // <-- REEMPLAZA CON TU URL DE AZURE
               .AllowAnyMethod()
               .AllowAnyHeader();
     });

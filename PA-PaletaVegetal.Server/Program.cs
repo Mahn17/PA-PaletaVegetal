@@ -3,22 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PA_PaletaVegetal.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-// --- BLOQUE PARA CREAR TABLAS AUTOMÁTICAMENTE ---
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<PA_PaletaVegetalServerContext>();
-        // Esta línea hace la magia: crea la DB y las tablas si no existen
-        context.Database.EnsureCreated(); 
-        Console.WriteLine("Base de datos verificada/creada con éxito.");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Error al crear la base de datos: " + ex.Message);
-    }
-}
+
 // ------------------------------------------------
 // 1. Configuración de la Base de Datos
 builder.Services.AddDbContext<PA_PaletaVegetalServerContext>(options =>
@@ -45,7 +30,22 @@ builder.Services.AddControllers()
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-
+// --- BLOQUE PARA CREAR TABLAS AUTOMÁTICAMENTE ---
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<PA_PaletaVegetalServerContext>();
+        // Esta línea hace la magia: crea la DB y las tablas si no existen
+        context.Database.EnsureCreated(); 
+        Console.WriteLine("Base de datos verificada/creada con éxito.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Error al crear la base de datos: " + ex.Message);
+    }
+}
 // 3. LIMPIEZA DE ARCHIVOS ESTÁTICOS (Ya no los necesitamos aquí)
 // Se eliminan: UseDefaultFiles, MapStaticAssets, UseStaticFiles
 

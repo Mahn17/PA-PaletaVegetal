@@ -3,7 +3,23 @@ using Microsoft.Extensions.DependencyInjection;
 using PA_PaletaVegetal.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// --- BLOQUE PARA CREAR TABLAS AUTOMÁTICAMENTE ---
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<PA_PaletaVegetalServerContext>();
+        // Esta línea hace la magia: crea la DB y las tablas si no existen
+        context.Database.EnsureCreated(); 
+        Console.WriteLine("Base de datos verificada/creada con éxito.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Error al crear la base de datos: " + ex.Message);
+    }
+}
+// ------------------------------------------------
 // 1. Configuración de la Base de Datos
 builder.Services.AddDbContext<PA_PaletaVegetalServerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PA_PaletaVegetalServerContext") 

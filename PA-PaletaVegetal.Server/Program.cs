@@ -1,26 +1,38 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PA_PaletaVegetal.Server.Data;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<PA_PaletaVegetalServerContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PA_PaletaVegetalServerContext") ?? throw new InvalidOperationException("Connection string 'PA_PaletaVegetalServerContext' not found.")));
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+
+// 1. Configuración de la Base de Datos
+builder.Services.AddDbContext<PA_PaletaVegetalServerContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PA_PaletaVegetalServerContext") 
+    ?? throw new InvalidOperationException("Connection string 'PA_PaletaVegetalServerContext' not found.")));
+
+// 2. CONFIGURACIÓN DE CORS (Crucial para que React reciba datos)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("https://tu-url-de-static-app.azurestaticapps.net") // <-- REEMPLAZA CON TU URL DE AZURE
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-app.MapStaticAssets();
-app.UseStaticFiles(); // <-- Esto habilita la carpeta wwwroot
-// Configure the HTTP request pipeline.
+// 3. LIMPIEZA DE ARCHIVOS ESTÁTICOS (Ya no los necesitamos aquí)
+// Se eliminan: UseDefaultFiles, MapStaticAssets, UseStaticFiles
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -28,10 +40,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// 4. APLICAR CORS (Debe ir antes de MapControllers)
+app.UseCors("AllowReactApp");
+
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapFallbackToFile("/index.html");
+// 5. ELIMINAR EL FALLBACK (Esto evitaba que vieras errores 404 reales de la API)
+// app.MapFallbackToFile("/index.html"); 
 
 app.Run();

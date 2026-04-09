@@ -1,23 +1,19 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using PA_PaletaVegetal.Server.Data;
-using System.IO;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ------------------------------------------------
-// 1. Configuración de la Base de Datos
+// 1. DB
 builder.Services.AddDbContext<PA_PaletaVegetalServerContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PA_PaletaVegetalServerContext") 
-    ?? throw new InvalidOperationException("Connection string 'PA_PaletaVegetalServerContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PA_PaletaVegetalServerContext")));
 
-// 2. CONFIGURACIÓN DE CORS (Crucial para que React reciba datos)
+// 2. CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("https://gentle-bay-07964fb1e.6.azurestaticapps.net/") // <-- REEMPLAZA CON TU URL DE AZURE
+        policy.WithOrigins("https://gentle-bay-07964fb1e.6.azurestaticapps.net") // Sin la barra diagonal al final
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -32,24 +28,23 @@ builder.Services.AddControllers()
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-// --- BLOQUE PARA CREAR TABLAS AUTOMÁTICAMENTE ---
+
+// 3. AUTO-CREACIÓN DE DB (Solo un bloque, limpiamos el duplicado)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<PA_PaletaVegetalServerContext>();
-        // Esta línea hace la magia: crea la DB y las tablas si no existen
-        context.Database.EnsureCreated(); 
-        Console.WriteLine("Base de datos verificada/creada con éxito.");
+        context.Database.EnsureCreated();
+        Console.WriteLine("Tablas verificadas.");
     }
     catch (Exception ex)
     {
-        Console.WriteLine("Error al crear la base de datos: " + ex.Message);
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error en DB");
     }
 }
-// 3. LIMPIEZA DE ARCHIVOS ESTÁTICOS (Ya no los necesitamos aquí)
-// Se eliminan: UseDefaultFiles, MapStaticAssets, UseStaticFiles
 
 if (app.Environment.IsDevelopment())
 {
@@ -58,43 +53,26 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 4. APLICAR CORS (Debe ir antes de MapControllers)
-app.UseCors("AllowReactApp");
+// 4. ARCHIVOS ESTÁTICOS (CONFIGURACIÓN CORRECTA)
+// Primero, habilitamos la wwwroot normal
+app.UseStaticFiles(); 
 
-app.UseAuthorization();
+// Segundo, configuramos FotosPV usando el entorno de la app, NO el directorio actual
+var folderPath = Path.Combine(app.Environment.ContentRootPath, "FotosPV");
 
-app.MapControllers();
-
-// 5. ELIMINAR EL FALLBACK (Esto evitaba que vieras errores 404 reales de la API)
-// app.MapFallbackToFile("/index.html"); 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<PA_PaletaVegetalServerContext>();
-        // Esto crea las tablas en Azure basándose en tus clases de C#
-        context.Database.EnsureCreated(); 
-        Console.WriteLine("Tablas creadas/verificadas con éxito.");
-    }
-    catch (Exception ex)
-    {
-        // Esto ayudará a ver el error real en los Logs de Azure si algo falla
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Error al sincronizar los modelos con la base de datos.");
-    }
-}
-// Crear la carpeta si no existe (importante en Azure)
-var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "FotosPV");
 if (!Directory.Exists(folderPath))
 {
     Directory.CreateDirectory(folderPath);
 }
 
-// Configurar para servir los archivos de esa carpeta
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(folderPath),
     RequestPath = "/FotosPV"
 });
+
+app.UseCors("AllowReactApp");
+app.UseAuthorization();
+app.MapControllers();
+
 app.Run();

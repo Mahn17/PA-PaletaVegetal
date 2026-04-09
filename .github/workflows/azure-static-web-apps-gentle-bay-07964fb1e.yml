@@ -7,7 +7,7 @@ on:
     # Solo se activa si hay cambios en la carpeta del cliente
     paths:
       - 'pa-paletavegetal.client/**'
-      - '.github/workflows/nombre-de-este-archivo.yml'
+      - '.github/workflows/azure-static-web-apps-gentle-bay-07964fb1e.yml'
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:

@@ -223,7 +223,16 @@ export default function Especies() {
             ],
             onFilter: (value, record) => record.riego === value
         },
-        { title: 'Raiz', dataIndex: 'raiz', key: 'raiz' },
+        { 
+            title: 'Raiz', dataIndex: 'raiz', 
+            key: 'raiz',
+            filters: [
+                { text: 'Profunda', value: 'Profunda' },
+                { text: 'Superficial', value: 'Superficial' },
+                { text: 'Extendida', value: 'Extendida' },
+            ],
+            onFilter: (value, record) => record.raiz === value
+        },
         {
             title: 'Crecimiento', dataIndex: 'crecimiento',
             key: 'crecimiento',
@@ -293,6 +302,9 @@ export default function Especies() {
         <>
             <Space direction="vertical" style={{ width: '100%' }}>
                 <Button type="primary" onClick={abrirModalAgregar}>+ Agregar Vegetación</Button>
+                <Button type="primary" href="https://implanhermosillo.gob.mx/wp-content/uploads/2025/08/PaletaVegetalHermosillo-book.pdf" target="_blank">
+                    Pdf de Vegetación
+                </Button>
                 <Table
                     columns={columnas}
                     dataSource={forecasts || []}

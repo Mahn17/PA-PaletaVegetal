@@ -4,10 +4,17 @@ on:
   push:
     branches:
       - master
+    # Solo se activa si hay cambios en la carpeta del cliente
+    paths:
+      - 'pa-paletavegetal.client/**'
+      - '.github/workflows/nombre-de-este-archivo.yml'
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - master
+    # También filtramos para los Pull Requests
+    paths:
+      - 'pa-paletavegetal.client/**'
 
 jobs:
   build_and_deploy_job:

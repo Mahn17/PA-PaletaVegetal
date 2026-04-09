@@ -15,10 +15,10 @@ function getItem(label, key, icon, children) {
 const items = [
     getItem('Especies', '1', <PieChartOutlined />),
     getItem('Estimacion de riego', '2', <DesktopOutlined />),
-    getItem('Team', 'sub2', <TeamOutlined />, [
-        getItem('Team 1', '6'),
-        getItem('Team 2', '8')
-    ]),
+    // getItem('Team', 'sub2', <TeamOutlined />, [
+    //     getItem('Team 1', '6'),
+    //     getItem('Team 2', '8')
+    // ]),
 ];
 
 const App = () => {

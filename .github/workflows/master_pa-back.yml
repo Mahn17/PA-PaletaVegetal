@@ -7,6 +7,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'pa-paletavegetal.server/**' # Solo se activa si cambias algo aquí
+      - '.github/workflows/master_pa-back.yml'
   workflow_dispatch:
 
 jobs:
@@ -27,7 +30,8 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        # Agregamos el path del proyecto para asegurar que solo publique el server
+        run: dotnet publish ./pa-paletavegetal.server/pa-paletavegetal.server.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4

@@ -302,7 +302,7 @@ export default function Especies() {
         <>
             <Space direction="vertical" style={{ width: '100%' }}>
                 <Button type="primary" onClick={abrirModalAgregar}>+ Agregar Vegetación</Button>
-                <Button type="primary" href="https://implanhermosillo.gob.mx/wp-content/uploads/2025/08/PaletaVegetalHermosillo-book.pdf" target="_blank">
+                <Button type="primary" color="danger" icon={<FilePdfOutlined />} href="https://implanhermosillo.gob.mx/wp-content/uploads/2025/08/PaletaVegetalHermosillo-book.pdf" target="_blank">
                     Pdf de Vegetación
                 </Button>
                 <Table

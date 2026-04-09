@@ -46,7 +46,13 @@ namespace PA_PaletaVegetal.Server.Controllers
                     return NotFound($"No se encontró el registro con ID {id}");
 
                 // Usamos la carpeta pública oficial de ASP.NET
-                var webRoot = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                string webRoot = _env.WebRootPath; 
+        
+                // Si por alguna razón es nulo (desarrollo local), usamos una ruta segura
+                if (string.IsNullOrEmpty(webRoot))
+                {
+                    webRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                }
                 var folderPath = Path.Combine(webRoot, "FotosPV");
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);

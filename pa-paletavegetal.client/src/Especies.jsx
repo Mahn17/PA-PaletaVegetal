@@ -364,7 +364,7 @@ export default function Especies() {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Tabla Cromática (Gráfico)"
+                        label="Tabla Cromática"
                         required={!registroEditando} // Muestra asterisco si es nuevo
                     >
                         <Upload
@@ -376,11 +376,11 @@ export default function Especies() {
                             }}
                             onRemove={() => setArchivoTabla(null)}
                         >
-                            <Button icon={<FileImageOutlined />}>Seleccionar Gráfico</Button>
+                            <Button icon={<FileImageOutlined />}>Seleccionar Tabla</Button>
                         </Upload>
                         {registroEditando && (
                             <span style={{ fontSize: '12px', color: 'gray', display: 'block', marginTop: 5 }}>
-                                Deja esto en blanco para conservar el gráfico actual.
+                                Deja esto en blanco para conservar la tabla actual.
                             </span>
                         )}
                     </Form.Item>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Space, Button, Table, Popconfirm, Modal, message, Input, Select, InputNumber, Upload } from 'antd';
-import { SearchOutlined, FilterOutlined, UploadOutlined, FileImageOutlined, PictureOutlined } from '@ant-design/icons';
+import { SearchOutlined, FilterOutlined, UploadOutlined, FileImageOutlined, PictureOutlined,FilePdfOutlined} from '@ant-design/icons';
 export default function Especies() {
     const [forecasts, setForecasts] = useState();
     const [isModalVisible, setIsModalVisible] = useState(false);

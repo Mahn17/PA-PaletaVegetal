@@ -1,0 +1,6 @@
+@PA_PaletaVegetal.Server_HostAddress = http://localhost:5133
+
+GET {{PA_PaletaVegetal.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

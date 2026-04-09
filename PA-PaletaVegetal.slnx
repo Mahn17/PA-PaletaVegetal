@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="pa-paletavegetal.client/pa-paletavegetal.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="PA-PaletaVegetal.Server/PA-PaletaVegetal.Server.csproj" />
+</Solution>

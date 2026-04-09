@@ -1,0 +1,21 @@
+.tabla-referencias {
+    border-collapse: collapse;
+    width: 40%;
+    margin-top: 10px;
+}
+
+    .tabla-referencias th {
+        background-color: #f9a825; /* café */
+        color: white;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .tabla-referencias td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .tabla-referencias tr:nth-child(even) {
+        background-color: #f2f2f2; /* filas alternadas */
+    }

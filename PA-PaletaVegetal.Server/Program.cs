@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PA_PaletaVegetal.Server.Data;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,5 +84,17 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "Error al sincronizar los modelos con la base de datos.");
     }
 }
+// Crear la carpeta si no existe (importante en Azure)
+var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "FotosPV");
+if (!Directory.Exists(folderPath))
+{
+    Directory.CreateDirectory(folderPath);
+}
 
+// Configurar para servir los archivos de esa carpeta
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(folderPath),
+    RequestPath = "/FotosPV"
+});
 app.Run();

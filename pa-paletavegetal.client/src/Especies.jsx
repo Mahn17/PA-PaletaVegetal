@@ -1,6 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Space, Button, Table, Popconfirm, Modal, message, Input, Select, InputNumber, Upload } from 'antd';
 import { SearchOutlined, FilterOutlined, UploadOutlined, FileImageOutlined, PictureOutlined,FilePdfOutlined} from '@ant-design/icons';
+
+const MAPA_ASOLEAMIENTO = {
+    "Pleno_sol": "Pleno sol",
+    "SombraParcial": "Sombra parcial"
+};
+
+const MAPA_RIEGO = {
+    "MuyBajo": "Muy bajo",
+    "Bajo": "Bajo",
+    "Moderado": "Moderado",
+    "Alto": "Alto",
+    "VegetalesYCesped": "Vegetales y césped"
+};
+
+const MAPA_CRECIMIENTO = {
+    "Rapido": "Rápido",
+    "Moderado": "Moderado",
+    "Lento": "Lento"
+};
+
 export default function Especies() {
     const [forecasts, setForecasts] = useState();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -221,7 +241,8 @@ export default function Especies() {
                 { text: 'Alto', value: 'Alto' },
                 { text: 'Vegetales y césped', value: 'VegetalesYCesped' },
             ],
-            onFilter: (value, record) => record.riego === value
+            onFilter: (value, record) => record.riego === value,
+            render: (value) => MAPA_RIEGO[value] || value
         },
         { 
             title: 'Raiz', dataIndex: 'raiz', 
@@ -241,7 +262,8 @@ export default function Especies() {
                 { text: 'Moderado', value: 'Moderado' },
                 { text: 'Lento', value: 'Lento' },
             ],
-            onFilter: (value, record) => record.crecimiento === value
+            onFilter: (value, record) => record.crecimiento === value,
+            render: (value) => MAPA_CRECIMIENTO[value] || value
         },
         {title: 'Medidas (m)',
         children: [
@@ -277,7 +299,8 @@ export default function Especies() {
                 { text: 'Pleno sol', value: 'Pleno_sol' },
                 { text: 'Sombra parcial', value: 'SombraParcial' },
             ],
-            onFilter: (value, record) => record.asoleamiento === value
+            onFilter: (value, record) => record.asoleamiento === value,
+            render: (value) => MAPA_ASOLEAMIENTO[value] || value
         },
         {
             title: 'Acciones',

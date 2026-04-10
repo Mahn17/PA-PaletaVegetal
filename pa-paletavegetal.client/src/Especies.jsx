@@ -356,14 +356,14 @@ export default function Especies() {
                 onOk={handleGuardar} 
                 onCancel={handleCancelar} 
                 okText="Guardar" 
-                cancelText="Cancelar">
+                cancelText="Cancelar"
                 styles={{
                     body: { 
                       maxHeight: '70vh', // Altura máxima (70% del alto de la pantalla)
                       overflowY: 'auto',  // Habilita el scroll interno
                       paddingRight: '10px' // Espacio para que el scroll no encime el contenido
                     }
-                  }}
+                  }}>
                 <Form form={form} layout="vertical" name="vegetacionForm">
                     <Form.Item name="nombre" label="Nombre de la Vegetación" rules={[{ required: true, message: 'Ingresa el nombre' }]}><Input placeholder="Ej. Mezquite" /></Form.Item>
                     <Form.Item

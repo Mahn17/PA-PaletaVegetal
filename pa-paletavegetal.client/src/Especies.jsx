@@ -42,6 +42,34 @@ export default function Especies() {
         populateWeatherData();
     }, []);
 
+    const confirmarEliminacion = (record) => {
+        let passwordInput = ""; // Aquí guardaremos lo que el usuario escriba
+
+        Modal.confirm({
+            title: 'Confirmar eliminación',
+            content: (
+                <div>
+                    <p>Esta acción no se puede deshacer. Por favor, ingresa la contraseña para confirmar:</p>
+                    <Input.Password
+                        placeholder="Contraseña"
+                        onChange={(e) => passwordInput = e.target.value}
+                    />
+                </div>
+            ),
+            okText: 'Eliminar',
+            okType: 'danger',
+            cancelText: 'Cancelar',
+            onOk: async () => {
+                if (passwordInput === '170102-250598') {
+                    await handleEliminar(record.id);
+                } else {
+                    message.error('Contraseña incorrecta. El registro no fue eliminado.');
+                    return Promise.reject(); // Evita que el modal se cierre si falla
+                }
+            },
+        });
+    };
+    
     const abrirModalAgregar = () => {
         setRegistroEditando(null);
         setArchivoFoto(null);
@@ -308,14 +336,9 @@ export default function Especies() {
             render: (_, record) => (
                 <Space size="middle">
                     <Button type="primary" ghost onClick={() => abrirModalEditar(record)}>Editar</Button>
-                    <Popconfirm
-                        title="¿Eliminar registro?"
-                        onConfirm={() => handleEliminar(record.id)}
-                        okText="Sí, eliminar"
-                        cancelText="Cancelar"
-                    >
-                        <Button danger>Eliminar</Button>
-                    </Popconfirm>
+                    <Button danger onClick={() => confirmarEliminacion(record)}>
+                        Eliminar
+                    </Button>
                 </Space>
             ),
         },

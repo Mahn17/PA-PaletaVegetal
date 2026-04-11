@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Space, Button, Table, Popconfirm, Modal, message, Input, Select, InputNumber, Upload } from 'antd';
+import { Form, Space, Button, Table, Popconfirm, Modal, message, Input, Select, InputNumber, Upload, Tooltip } from 'antd';
 import { SearchOutlined, FilterOutlined, UploadOutlined, FileImageOutlined, PictureOutlined,FilePdfOutlined} from '@ant-design/icons';
 
 const MAPA_ASOLEAMIENTO = {
@@ -19,6 +19,12 @@ const MAPA_CRECIMIENTO = {
     "Rapido": "Rápido",
     "Moderado": "Moderado",
     "Lento": "Lento"
+};
+
+const DESCRIPCIONES_CRECIMIENTO = {
+    'Rapido': 'Alcanza su talla madura en menos de 5 años.',
+    'Moderado': 'Alcanza su talla madura entre 5 y 15 años. ',
+    'Lento': 'Alcanza su talla madura en más de 15 años.'
 };
 
 export default function Especies() {
@@ -291,7 +297,27 @@ export default function Especies() {
                 { text: 'Lento', value: 'Lento' },
             ],
             onFilter: (value, record) => record.crecimiento === value,
-            render: (value) => MAPA_CRECIMIENTO[value] || value
+            //render: (value) => MAPA_CRECIMIENTO[value] || value,
+            render: (valor) => {
+                // Obtenemos el texto del tooltip basado en el valor
+                const info = DESCRIPCIONES_CRECIMIENTO[valor] || "Sin información";
+                
+                // Formateamos el texto para que no salga "Rapido" (sin acento)
+                const etiquetasCrecimiento = {
+                    'Rapido': 'Rápido',
+                    'Moderado': 'Moderado',
+                    'Lento': 'Lento'
+                };
+                const textoVisible = MAPA_CRECIMIENTO[valor] || valor;
+
+                return (
+                    <Tooltip title={info}>
+                        <span style={{ cursor: 'help', borderBottom: '1px dotted #1677ff' }}>
+                            {textoVisible}
+                        </span>
+                    </Tooltip>
+                );
+            }
         },
         {title: 'Medidas (m)',
         children: [

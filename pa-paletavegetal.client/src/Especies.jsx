@@ -4,15 +4,15 @@ import { SearchOutlined, FilterOutlined, UploadOutlined, FileImageOutlined, Pict
 
 const MAPA_ASOLEAMIENTO = {
     "Pleno_sol": "Pleno sol",
-    "SombraParcial": "Sombra parcial"
+    "Sombra_parcial": "Sombra parcial"
 };
 
 const MAPA_RIEGO = {
-    "MuyBajo": "Muy bajo",
+    "Muy_bajo": "Muy bajo",
     "Bajo": "Bajo",
     "Moderado": "Moderado",
     "Alto": "Alto",
-    "VegetalesYCesped": "Vegetales y césped"
+    "Vegetales_y_cesped": "Vegetales y césped"
 };
 
 const MAPA_CRECIMIENTO = {

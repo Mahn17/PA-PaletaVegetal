@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { DesktopOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-
+import { DesktopOutlined, PieChartOutlined, TeamOutlined, GlobalOutlined } from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu, theme, Typography, Space, Divider } from 'antd';
+const { Text, Link } = Typography;
 // Importamos tus nuevas pantallas
 import Especies from './Especies';
 import EstimacionRiego from './EstimacionRiego';
@@ -66,7 +66,20 @@ const App = () => {
                 </Content>
 
                 <Footer style={{ textAlign: 'center' }}>
-                    PaletaVegetal ©{new Date().getFullYear()} Created by MAHN
+                    <div>PaletaVegetal ©{new Date().getFullYear()} Created by MAHN</div>
+                    <Divider style={{ margin: '12px 0' }} />
+                    <Space split={<Divider type="vertical" />}>
+                        <Text type="secondary" style={{ fontSize: '12px' }}>
+                            Información técnica recolectada de la <strong>Paleta Vegetal de Hermosillo</strong>
+                        </Text>
+                        <Link 
+                            href="https://www.implanhermosillo.gob.mx/" 
+                            target="_blank" 
+                            style={{ fontSize: '12px', display: 'flex', alignItems: 'center' }}
+                        >
+                            <GlobalOutlined style={{ marginRight: '4px' }} /> IMPLAN Hermosillo
+                        </Link>
+                    </Space>
                 </Footer>
             </Layout>
         </Layout>

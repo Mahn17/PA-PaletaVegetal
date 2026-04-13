@@ -241,8 +241,8 @@ export default function Especies() {
             const recMax = record[dataIndexMax];
 
             // Lógica de solapamiento: Muestra la planta si su rango toca el rango buscado
-            const pasaMinimo = searchMin === null || searchMin === undefined || recMax >= searchMin;
-            const pasaMaximo = searchMax === null || searchMax === undefined || recMin <= searchMax;
+            const pasaMinimo = searchMin === null || searchMin === undefined || recMin >= searchMin;
+            const pasaMaximo = searchMax === null || searchMax === undefined || recMax <= searchMax;
             return pasaMinimo && pasaMaximo;
         },
     });
